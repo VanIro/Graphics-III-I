@@ -1,0 +1,7 @@
+﻿  matrixFunc.cpp
+D:\VisualStudiostd\Modelling-Heydar-Aliyev-Centre-main\colorOptions.h(17,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\VisualStudiostd\Modelling-Heydar-Aliyev-Centre-main\vect.h(98,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\VisualStudiostd\Modelling-Heydar-Aliyev-Centre-main\Coord.h(53,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+D:\VisualStudiostd\Modelling-Heydar-Aliyev-Centre-main\matrixFunc.cpp(109,22): warning C4305: 'initializing': truncation from 'double' to 'float'
+D:\VisualStudiostd\Modelling-Heydar-Aliyev-Centre-main\matrixFunc.cpp(154,16): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  try.vcxproj -> D:\VisualStudiostd\Modelling-Heydar-Aliyev-Centre-main\Debug\try.exe
