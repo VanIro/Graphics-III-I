@@ -31,6 +31,7 @@ struct mat4f
 
 struct Triangle {
     vect4 vertices[3];
+    int vert_indices[3];
     vect4 normals[3];
     vec2i texCoords[3];
     vec3 color;
@@ -41,9 +42,11 @@ struct Triangle {
     {
         for (int i = 0; i < 3; i++) {
             vertices[i] = tri.vertices[i];
+            vert_indices[i] = tri.vert_indices[i];
             normals[i] = tri.normals[i];
             texCoords[i] = tri.texCoords[i];
             vertex_intensity[i] = tri.vertex_intensity[i];
+
         }
         color = tri.color;
     }
@@ -77,6 +80,11 @@ struct Triangle {
         vertices[0] = a;
         vertices[1] = b;
         vertices[2] = c;
+    }
+    void setVertIndices(int a, int b, int c) {
+        vert_indices[0] = a;
+        vert_indices[1] = b;
+        vert_indices[2] = c;
     }
 
     void setNormals(vect4 na, vect4 nb, vect4 nc)

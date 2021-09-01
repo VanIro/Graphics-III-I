@@ -101,7 +101,7 @@ void Camera::mouseMoveEvent(int x, int y) {
         vect4 axis(dely,-delx,0,0);
         //axis = axis * -1; //if z dirn is inwards <coordinate-z>
         //rotate proporp... to magntd about axis
-        magntd *= 0.02 * deltaTime; //std::cout << 0.002 * deltaTime;
+        magntd *= 0.015 * deltaTime; //std::cout << 0.002 * deltaTime;
         float tmp_mat1[4][4], Itmp_mat1[4][4];
         rotateMatrixAxis(tmp_mat1, axis, magntd);
 

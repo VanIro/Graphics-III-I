@@ -26,24 +26,20 @@ int main(int argc, char** argv)
 
     //model_zaha->camera = camera;
 
-    
-    model_base->scale_model(10); model_blocks->scale_model(10); model_glass->scale_model(10);
-   // model_zaha->scale_model(10);
+    for (int i = 0; i < NumModels; i++) {
+        models[i]->scale_model(10);
+        //models[i]->scale_model(1.5);
+        //models[i]->scale_model(2.5,'Z');
+        //models[i]->scale_model(1.5, 'Y');
+        //models[i]->rotate_model('Z', 335);
+        //models[i]->rotate_model('Y', 100);
+        models[i]->rotate_model('X', 180);
+        models[i]->translate_model({-50,30,150,0});
+    }
 
     /*std::cout << "\nmmm" << vect4::a << " --> " << vect4::X;
     std::cout << "\n" << vect4::b << " --> " << vect4::Y;
     std::cout << "\n" << vect4::c << " --> " << vect4::Z;*/
-
-    //model_zaha->scale_model(1.5);
-    //model_zaha->scale_model(2.5,'Z');
-    //model_zaha->scale_model(1.5, 'Y');
-    //model_zaha->rotate_model('Z', 335);
-    //model_zaha->rotate_model('Y', 100);
-    //model_zaha->rotate_model('X', -70);
-
-    //model_zaha->scale_model(0.15);
-    //model_zaha->translate_model({ SWIDTH / 2, SHEIGHT / 2, 0 });
-    //model_zaha->translate_model({0,-8,0});
 
 
     glutDisplayFunc(drawModel);
@@ -102,12 +98,10 @@ void drawModel()
     //model_zaha->transformModel(view, projection);
     //model_zaha->draw();
 
-    model_base->transformModel(view, projection);
-    model_blocks->transformModel(view, projection);
-    model_glass->transformModel(view, projection);
-    model_base->draw();
-    model_glass->draw();
-    model_blocks->draw();
+    for (int i = 0; i < NumModels; i++) {
+        models[i]->transformModel(view, projection);
+        models[i]->draw();
+    }
 
     LLight->transform(view, projection);
     LLight->draw();

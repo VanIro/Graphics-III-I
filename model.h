@@ -13,6 +13,13 @@
 class Model
 {
 private:
+    std::vector<vect4> vertices_list;
+    std::vector<vect4> fvertices_list;
+    std::vector<vect4> normals_list;
+    std::vector<int> vert_norm_indices;
+
+    std::vector<vect4> intensities_list;
+
     std::vector<Triangle> triangles;
     std::vector<Triangle> ftriangles;
 
@@ -31,6 +38,10 @@ public:
     //bool backfaceDetectionNormalize(Triangle& tri);
     bool Culling(Triangle& tri);
     //void updateTransform(mat4f& view, mat4f& projection);
+    bool is_in_depthBox(int vertices[3]);
+    bool is_in_depthBox(vect4 vertices[3]);
+    bool is_in_viewPlane(int vertices[3]); 
+    bool is_in_viewPlane(vect4 vertices[3]);
 
     void draw();
     float calIntensity(vect4, vect4, vect4);

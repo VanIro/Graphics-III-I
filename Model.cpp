@@ -1,4 +1,4 @@
-#include "Model.h"
+﻿#include "Model.h"
 #include"include_globals.h"
 #include "light.h"
 
@@ -8,50 +8,52 @@ extern float ZNEAR,ZFAR,XLEFT,XRIGHT,YUP,YDOWN;
 extern Light* LLight;
 extern Camera* camera;
 
+#define VERT_INDICES_MODE false
+
 void Model::draw()
 {
     //drawWireframe_model(ftriangles);
     draw_model(ftriangles, Shade);
 }
 
-void Model::oldLoad(std::string filename)
-{
-    std::ifstream file;
-    file.open(filename);
-    if (file.fail())
-    {
-        std::cout << "File cannot be opened \n";
-        exit(-1);
-    }
-    // Local cache of verts
-    std::vector<vect4> verts;
-
-    while (!file.eof())
-    {
-        char line[128];
-        file.getline(line, 128);
-
-        std::stringstream s;
-        s << line;
-
-        char junk;
-
-        if (line[0] == 'v')
-        {
-            vect4 v;
-            s >> junk >> v.x >> v.y >> v.z;
-            verts.push_back(v);
-        }
-
-        if (line[0] == 'f')
-        {
-            int f[3];
-            s >> junk >> f[0] >> f[1] >> f[2];
-            triangles.push_back(Triangle{ verts[f[0] - 1], verts[f[1] - 1], verts[f[2] - 1] });
-        }
-    }
-    ftriangles = triangles;
-}
+//void Model::oldLoad(std::string filename)
+//{
+//    std::ifstream file;
+//    file.open(filename);
+//    if (file.fail())
+//    {
+//        std::cout << "File cannot be opened \n";
+//        exit(-1);
+//    }
+//    // Local cache of verts
+//    std::vector<vect4> verts;
+//
+//    while (!file.eof())
+//    {
+//        char line[128];
+//        file.getline(line, 128);
+//
+//        std::stringstream s;
+//        s << line;
+//
+//        char junk;
+//
+//        if (line[0] == 'v')
+//        {
+//            vect4 v;
+//            s >> junk >> v.x >> v.y >> v.z;
+//            verts.push_back(v);
+//        }
+//
+//        if (line[0] == 'f')
+//        {
+//            int f[3];
+//            s >> junk >> f[0] >> f[1] >> f[2];
+//            triangles.push_back(Triangle{ verts[f[0] - 1], verts[f[1] - 1], verts[f[2] - 1] });
+//        }
+//    }
+//    ftriangles = triangles;
+//}
 
 void Model::Load(std::string filename)
 {
@@ -96,6 +98,8 @@ void Model::Load(std::string filename)
             v.w = 1;
             // maths::printvec(v);
             verts.push_back(v);
+            vertices_list.push_back(v);
+            vert_norm_indices.push_back(7);//dummy pushed
             count++;
         }
         //else if (!line.compare(0, 3, "vt ")) //starts with vt<space>
@@ -116,6 +120,7 @@ void Model::Load(std::string filename)
             iss >> n.z;
             n.w = 0;
             normals.push_back(n);
+            normals_list.push_back(n);
         }
         else if (!line.compare(0, 2, "f ")) //starts with f<space>
         {
@@ -135,9 +140,12 @@ void Model::Load(std::string filename)
             }
             Triangle tri;
             tri.setVertex(verts[f[0].x], verts[f[1].x], verts[f[2].x]);
+            tri.setVertIndices(f[0].x, f[1].x, f[2].x);
             // std::cout  << f[0][0] <<'\n';
             //tri.setTexCoords(textures[f[0].y], textures[f[1].y], textures[f[2].y]);
-            tri.setNormals(normals[f[0].z], normals[f[1].z], normals[f[2].z]);
+            tri.setNormals(normals_list[f[0].z], normals_list[f[1].z], normals_list[f[2].z]);
+            for (int i = 0; i < 3; i++)
+                vert_norm_indices[f[i].x] = f[i].z;
             triangles.push_back(tri);
         }
     }
@@ -164,73 +172,140 @@ void Model::Load(std::string filename)
 
 void Model::translate_model(vect4 pt)
 {
-    for (int i = 0; i < triangles.size(); i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            transate_polygon(triangles[i].vertices[j], pt);
+    if (VERT_INDICES_MODE)
+        for (auto& vert : vertices_list) {
+            transate_polygon(vert, pt);
         }
-    }
+    else
+        for (int i = 0; i < triangles.size(); i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                transate_polygon(triangles[i].vertices[j], pt);
+            }
+        }
 }
 
 void Model::scale_model(float pt, char dim )
 {
-    if (dim == 'X')
+    if (dim == 'X') {
+        if(VERT_INDICES_MODE)
+        for (auto& vert : vertices_list) {
+            scale_polygon(vert, pt, 'X');
+        }
+        else
         for (int i = 0; i < triangles.size(); i++)
             for (int j = 0; j < 3; j++)
                 scale_polygon(triangles[i].vertices[j], pt, 'X');
-    if (dim == 'Y')
+    }
+    if (dim == 'Y') {
+        if(VERT_INDICES_MODE)
+        for (auto& vert : vertices_list) {
+            scale_polygon(vert, pt, 'Y');
+        }
+        else
         for (int i = 0; i < triangles.size(); i++)
             for (int j = 0; j < 3; j++)
                 scale_polygon(triangles[i].vertices[j], pt, 'Y');
-    if (dim == 'Z')
+    }
+    if (dim == 'Z') {
+        if(VERT_INDICES_MODE)
+        for (auto& vert : vertices_list) {
+            scale_polygon(vert, pt, 'Z');
+        }
+        else
         for (int i = 0; i < triangles.size(); i++)
             for (int j = 0; j < 3; j++)
                 scale_polygon(triangles[i].vertices[j], pt, 'Z');
-    else
+    }
+    else {
+        if(VERT_INDICES_MODE)
+        for (auto& vert : vertices_list) {
+            scale_polygon(vert, pt);
+        }
+        else
         for (int i = 0; i < triangles.size(); i++)
             for (int j = 0; j < 3; j++)
                 scale_polygon(triangles[i].vertices[j], pt);
+    }
 }
 
 void Model::rotate_model(char XYZ, float angle)
 {
-    if (XYZ == 'X')
+    if (XYZ == 'X') {
+        if (VERT_INDICES_MODE) {
+            for (auto& vert : vertices_list) {
+                rotateX(vert, angle);
+            }
+            for (auto& norm : normals_list) {
+                rotateX(norm, angle);
+            }
+        }
+        else
         for (int i = 0; i < triangles.size(); i++)
             for (int j = 0; j < 3; j++) {
+                
                 rotateX(triangles[i].vertices[j], angle);
                 rotateX(triangles[i].normals[j], angle);
             }
-    else if (XYZ == 'Y')
+    }
+    else if (XYZ == 'Y') {
+        if (VERT_INDICES_MODE) {
+            for (auto& vert : vertices_list) {
+                rotateY(vert, angle);
+            }
+            for (auto& norm : normals_list) {
+                rotateY(norm, angle);
+            }
+        }
+        else
         for (int i = 0; i < triangles.size(); i++)
             for (int j = 0; j < 3; j++) {
                 rotateY(triangles[i].vertices[j], angle);
                 rotateY(triangles[i].normals[j], angle);
             }
-    else if (XYZ == 'Z')
+    }
+    else if (XYZ == 'Z') {
+        if (VERT_INDICES_MODE) {
+            for (auto& vert : vertices_list) {
+                rotateZ(vert, angle);
+            }
+            for (auto& norm : normals_list) {
+                rotateZ(norm, angle);
+            }
+        }
+        else
         for (int i = 0; i < triangles.size(); i++)
             for (int j = 0; j < 3; j++) {
                 rotateZ(triangles[i].vertices[j], angle);
                 rotateZ(triangles[i].normals[j], angle);
             }
+    }
 }
 
-void Model::rotate_modelY2(float angle, float yref)
-{
+//void Model::rotate_modelY2(float angle, float yref)
+//{
+//    //deprecated but not updated because probably not in use
+//    for (int i = 0; i < triangles.size(); i++)
+//        for (int j = 0; j < 3; j++)
+//            rotateY2(triangles[i].vertices[j], angle, yref);
+//}
 
-    for (int i = 0; i < triangles.size(); i++)
-        for (int j = 0; j < 3; j++)
-            rotateY2(triangles[i].vertices[j], angle, yref);
-}
-
-bool is_in_depthBox(vect4 vertices[3]) {
+bool Model::is_in_depthBox(vect4 vertices[3]) {
     if (vertices[0].z < ZNEAR && vertices[0].z > ZFAR)
         if (vertices[1].z < ZNEAR && vertices[1].z > ZFAR)
             if (vertices[2].z < ZNEAR && vertices[2].z > ZFAR)
                 return true;
     return false;
 }
-bool is_in_viewPlane(vect4 vertices[3]) {
+bool Model::is_in_depthBox(int vertices[3]) {
+    if (fvertices_list[vertices[0]].z < ZNEAR && fvertices_list[vertices[0]].z > ZFAR)
+        if (fvertices_list[vertices[1]].z < ZNEAR && fvertices_list[vertices[1]].z > ZFAR)
+            if (fvertices_list[vertices[2]].z < ZNEAR && fvertices_list[vertices[2]].z > ZFAR)
+                return true;
+    return false;
+}
+bool Model::is_in_viewPlane(vect4 vertices[3]) {
 
     bool flag = false;
     //bool flag2 = true;
@@ -248,51 +323,117 @@ bool is_in_viewPlane(vect4 vertices[3]) {
 
     return true;
 }
+bool Model::is_in_viewPlane(int vertices[3]) {
+
+    bool flag = false;
+    //bool flag2 = true;
+    for (int i = 0; i < 3; i++)
+        if (fvertices_list[vertices[i]].x > XLEFT && fvertices_list[vertices[i]].x < XRIGHT) {
+            flag = true;
+        }
+    if (!flag) return false;
+    flag = false;
+    for (int i = 0; i < 3; i++)
+        if (fvertices_list[vertices[i]].y > YDOWN && fvertices_list[vertices[i]].y < YUP) {
+            flag = true;
+        }
+    if (!flag) return false;
+
+    return true;
+}
 void Model::transformModel(mat4f& viewMat, mat4f& projection)
 {
     ftriangles.clear();
+    fvertices_list.clear();
     int cullCount = 0;
     int clipped = 0;
     int faceCount = 0;
+    int vec_index_count = 0;
+
+    if(VERT_INDICES_MODE)
+    for (auto& vert : vertices_list) {
+        vect4 tmp_vert = mul(viewMat, vert);
+        tmp_vert = mulProj(projection, tmp_vert);// mulProj doesnt change z coord
+        fvertices_list.push_back(tmp_vert);
+        intensities_list.push_back(
+            calcIntensity(Ka, Kd, Ks, ns,vert, LLight->getPosition(), view, 
+                normals_list[vert_norm_indices[vec_index_count++]],
+                Ia, LLight->getIntensities()
+            )
+        );
+    }
     for (auto& tri : triangles)
     {
         Triangle temptri = tri;
 
-        bool culled = backFaceDetection(temptri);
-        //bool culled = Culling(temptri);
-        if (culled) {
-            cullCount++;
-            //continue;
-        }
 
         // view transformation
-        temptri.vertices[0] = mul(viewMat, temptri.vertices[0]);
-        temptri.vertices[1] = mul(viewMat, temptri.vertices[1]);
-        temptri.vertices[2] = mul(viewMat, temptri.vertices[2]);
+        if (!VERT_INDICES_MODE) {
+            temptri.vertices[0] = mul(viewMat, temptri.vertices[0]);
+            temptri.vertices[1] = mul(viewMat, temptri.vertices[1]);
+            temptri.vertices[2] = mul(viewMat, temptri.vertices[2]);
+        }
 
         //std::cout<< temptri.vertices[0] <<std::endl;
         //std::cout << temptri.vertices[1] << std::endl;
         //std::cout << temptri.vertices[2] << std::endl;
 
         //Projection Transformation
-        if (is_in_depthBox(temptri.vertices)) {
-            temptri.vertices[0] = mulProj(projection, temptri.vertices[0]);
-            temptri.vertices[1] = mulProj(projection, temptri.vertices[1]);
-            temptri.vertices[2] = mulProj(projection, temptri.vertices[2]);
-            if (is_in_viewPlane(temptri.vertices)) {
+        bool depth_check_flag;
+        if (VERT_INDICES_MODE) {
+            depth_check_flag = is_in_depthBox(temptri.vert_indices);
+        }
+        else {
+            depth_check_flag = is_in_depthBox(temptri.vertices);
+        }
+        if (depth_check_flag) {
+            if (!VERT_INDICES_MODE) {
+                temptri.vertices[0] = mulProj(projection, temptri.vertices[0]);
+                temptri.vertices[1] = mulProj(projection, temptri.vertices[1]);
+                temptri.vertices[2] = mulProj(projection, temptri.vertices[2]);
+            }
+            //backface culling should be used at projected coords...
+            bool culled = backFaceDetection(temptri);
+            //bool culled = Culling(temptri);
+            if (culled) {
+                cullCount++;
+                //continue;
+            }
 
-
+            if (VERT_INDICES_MODE) {
+                depth_check_flag = is_in_viewPlane(temptri.vert_indices);
+            }
+            else {
+                depth_check_flag = is_in_viewPlane(temptri.vertices);
+            }
+            if (depth_check_flag) {
+                if(VERT_INDICES_MODE)
+                    temptri.setVertex(
+                        fvertices_list[temptri.vert_indices[0]],
+                        fvertices_list[temptri.vert_indices[1]],
+                        fvertices_list[temptri.vert_indices[2]]
+                    );
                 tri.color = vec3{ 200, 205, 200 }.normalize();
                 if (Shade) {
-                    temptri.setIntensity(0, calcIntensity(Ka, Kd, Ks, ns, tri.vertices[0], LLight->getPosition(), view, tri.normals[0], Ia, LLight->getIntensities()));
-                    temptri.setIntensity(1, calcIntensity(Ka, Kd, Ks, ns, tri.vertices[1], LLight->getPosition(), view, tri.normals[1], Ia, LLight->getIntensities()));
-                    temptri.setIntensity(2, calcIntensity(Ka, Kd, Ks, ns, tri.vertices[2], LLight->getPosition(), view, tri.normals[2], Ia, LLight->getIntensities()));
+                    //using world coordinates to calculate lighting
+                    
+                    if (VERT_INDICES_MODE) {
+                        temptri.setIntensity(0, intensities_list[temptri.vert_indices[0]]);
+                        temptri.setIntensity(1, intensities_list[temptri.vert_indices[1]]);
+                        temptri.setIntensity(2, intensities_list[temptri.vert_indices[2]]);
+                    }
+                    else {
+                        temptri.setIntensity(0, calcIntensity(Ka, Kd, Ks, ns, tri.vertices[0], LLight->getPosition(), view, tri.normals[0], Ia, LLight->getIntensities()));
+                        temptri.setIntensity(1, calcIntensity(Ka, Kd, Ks, ns, tri.vertices[1], LLight->getPosition(), view, tri.normals[1], Ia, LLight->getIntensities()));
+                        temptri.setIntensity(2, calcIntensity(Ka, Kd, Ks, ns, tri.vertices[2], LLight->getPosition(), view, tri.normals[2], Ia, LLight->getIntensities()));
+                    }
+
                 }
                 else {
                     flatShading(tri);
                 }
 
-                /*std::cout << "�" << temptri.vertices[0] << std::endl;
+                /*std::cout << "£" << temptri.vertices[0] << std::endl;
                 std::cout << temptri.vertices[1] << std::endl;
                 std::cout << temptri.vertices[2] << std::endl;*/
                 for (int i = 0; i < 3; i++)
