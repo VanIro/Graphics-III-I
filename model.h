@@ -38,6 +38,6 @@ public:
     void Shading(Triangle&);
     bool Shade = true;
 
-    Camera* camera;
+    Camera* camera2;
 };
 

@@ -16,21 +16,27 @@ int main(int argc, char** argv)
     //camera = new Camera();
     //Model* model = model_zaha;// new Model;
 
-    model_zaha->Load("obj/zahaf1.obj");
+    model_base->Load("obj/baseOnly.obj");
+    model_blocks->Load("obj/blocksOnly.obj");
+    model_glass->Load("obj/glassOnly2.obj");
+    
+    //model_zaha->Load("obj/colored1.obj");
     //model_zaha->Load("obj/smooth_zaha.obj");
     //model_zaha->Load("obj/building - Copy.obj");
-    model_zaha->camera = camera;
-    
 
-    model_zaha->scale_model(10);
+    //model_zaha->camera = camera;
+
+    
+    model_base->scale_model(10); model_blocks->scale_model(10); model_glass->scale_model(10);
+   // model_zaha->scale_model(10);
 
     /*std::cout << "\nmmm" << vect4::a << " --> " << vect4::X;
     std::cout << "\n" << vect4::b << " --> " << vect4::Y;
     std::cout << "\n" << vect4::c << " --> " << vect4::Z;*/
 
-    model_zaha->scale_model(0.6);
-    model_zaha->scale_model(2.5,'Z');
-    model_zaha->scale_model(1.5, 'Y');
+    //model_zaha->scale_model(1.5);
+    //model_zaha->scale_model(2.5,'Z');
+    //model_zaha->scale_model(1.5, 'Y');
     //model_zaha->rotate_model('Z', 335);
     //model_zaha->rotate_model('Y', 100);
     //model_zaha->rotate_model('X', -70);
@@ -89,14 +95,24 @@ void drawModel()
     glClear(GL_COLOR_BUFFER_BIT);
     mat4f view = camera->getViewMatrix();
     mat4f projection;
-    //camera->getProjectionMatrix(projection);
-    projection = Perspective(90.0f, (float)SHEIGHT / SWIDTH);
+    camera->getProjectionMatrix(projection);
+    //projection = Perspective(90.0f, (float)SHEIGHT / SWIDTH);
     //display_transform(projection.matrix4);
-    model_zaha->transformModel(view, projection);
-    model_zaha->draw();
+    
+    //model_zaha->transformModel(view, projection);
+    //model_zaha->draw();
+
+    model_base->transformModel(view, projection);
+    model_blocks->transformModel(view, projection);
+    model_glass->transformModel(view, projection);
+    model_base->draw();
+    model_glass->draw();
+    model_blocks->draw();
+
     LLight->transform(view, projection);
     LLight->draw();
-    //std::cout << "\nFPS...  "<<100/deltaTime<<"\n";
+
+    std::cout << "\nFPS...  "<<100/deltaTime<<"\n";
 
     glutSwapBuffers();
     glFlush();

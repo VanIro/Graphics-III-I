@@ -88,9 +88,9 @@ public:
             //std::cout << "mousemove <- camera flag is true";
             float delx = x - MousePosRec.x; MousePosRec.x = x;
             float dely = y - MousePosRec.y; MousePosRec.y = y;
-            float speed = 0.1;
-            delx = delx * speed * deltaTime;
-            dely = -dely * speed * deltaTime;
+            float speed = 0.06;
+            delx = delx * speed * deltaTime; delx *= -1;
+            dely = -dely * speed * deltaTime; dely *= -1;
             //std::cout << "\n "<<delx<<" , " << dely << " z_flag : " << z_dir;
             if (z_dir) {
                 Position = Position + camera_front*dely;

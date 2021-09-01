@@ -12,8 +12,8 @@ vect4 mulProj(mat4f matrix, vect4& p)
     temp.w = matrix.matrix4[3][0] * p.x + matrix.matrix4[3][1] * p.y + matrix.matrix4[3][2] * p.z + matrix.matrix4[3][3] * p.w;
 
     if (abs(temp.w) > 0.0001) {
-        //temp.z *= temp.w;
-        //temp = temp / temp.w;
+        temp.z *= temp.w;
+        temp = temp / temp.w;
         //vect4 zzz = temp / temp.w;
         //std::cout << "\n\t" << temp << "\t\t -> " << zzz;
     }

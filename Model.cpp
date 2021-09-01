@@ -6,6 +6,7 @@ extern const unsigned int WIDTH;
 extern const unsigned int HEIGHT;
 extern float ZNEAR,ZFAR,XLEFT,XRIGHT,YUP,YDOWN;
 extern Light* LLight;
+extern Camera* camera;
 
 void Model::draw()
 {
@@ -261,7 +262,7 @@ void Model::transformModel(mat4f& viewMat, mat4f& projection)
         //bool culled = Culling(temptri);
         if (culled) {
             cullCount++;
-            continue;
+            //continue;
         }
 
         // view transformation
@@ -281,7 +282,7 @@ void Model::transformModel(mat4f& viewMat, mat4f& projection)
             if (is_in_viewPlane(temptri.vertices)) {
 
 
-                tri.color = vec3{ 0, 255, 200 }.normalize();
+                tri.color = vec3{ 200, 205, 200 }.normalize();
                 if (Shade) {
                     temptri.setIntensity(0, calcIntensity(Ka, Kd, Ks, ns, tri.vertices[0], LLight->getPosition(), view, tri.normals[0], Ia, LLight->getIntensities()));
                     temptri.setIntensity(1, calcIntensity(Ka, Kd, Ks, ns, tri.vertices[1], LLight->getPosition(), view, tri.normals[1], Ia, LLight->getIntensities()));

@@ -17,7 +17,7 @@ Camera::Camera()
     camera_right = { 1,0,0,0 };
     front_flag = false;
     zoom = 20.0f;
-    Speed = 5.0f;
+    Speed = 2.0f;
     setViewMatrix(Position, Front + Position, Up);
     setProjectionMatrix(vect4(0,0,ZNEAR*1.1,0), ZNEAR*1.1+300);
 }
@@ -33,33 +33,34 @@ void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
     vect4 move(0, 0, 0, 0);
     if (direction == Camera_Movement::UP) {
         move = Up* deltaTime* Speed;
-        Position = Position + Up * deltaTime * Speed;
+        Position = Position + move;
         refresh_req = true;
     }
     if (direction == Camera_Movement::DOWN) {
         move = Up * deltaTime * -Speed;
-        Position = Position - Up * deltaTime * Speed;
+        Position = Position + move;
         refresh_req = true;
     }
     if (direction == Camera_Movement::LEFT) {
         move = Right * deltaTime * -Speed;
-        Position = Position + Right * (deltaTime * -Speed);
+        Position = Position + move;
         refresh_req = true;
     }
     if (direction == Camera_Movement::RIGHT) {
         move = Right * deltaTime * Speed;
-        Position = Position + Right * (deltaTime * Speed);
+        Position = Position + move;
         refresh_req = true;
     }
 
     if (direction == Camera_Movement::FORWARD) {
-        vect4 ahead = Front * deltaTime * Speed;
-        //std::cout << "front..." << ahead.x << " " << ahead.y << " " << ahead.z << "\n";
-        Position = Position + Front*deltaTime*Speed;
+        move = Front * deltaTime * Speed*0.8f;
+        std::cout << "front..." << move.x << " " << move.y << " " << move.z << "\n";
+        Position = Position + move;
         refresh_req = true;
     }
     if (direction == Camera_Movement::BACK) {
-        Position = Position - Front * deltaTime * Speed;
+        move = Front * deltaTime * (-Speed)*.8f;
+        Position = Position + move;
         refresh_req = true;
     }
 
@@ -81,6 +82,7 @@ void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
 
         translateMatrix(tmp_mat, -move.x, -move.y, -move.z);
         mul(IviewMat, tmp_mat, IviewMat);
+        
     }
 }
 
