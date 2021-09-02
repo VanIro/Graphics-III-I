@@ -21,7 +21,8 @@ int main(int argc, char** argv)
     //model_blocks->Load("obj/blockOnly.obj");
     model_glass->Load("obj/Iglass3.obj");
     //model_glass->Load("obj/glassOnly.obj");
-    model_cloud->Load("obj/cloud1.obj");
+    model_cloud->Load("obj/Iclouds.obj");
+    model_frames->Load("obj/Iframes.obj");
     
     //model_zaha->Load("obj/colored1.obj");
     //model_zaha->Load("obj/smooth_zaha.obj");
@@ -31,12 +32,18 @@ int main(int argc, char** argv)
 
     model_glass->setNs(1);
     model_glass->setKs(1,1,1);
-    model_glass->setColor(100, 200, 200);
+    model_glass->setColor(50, 50, 230);
 
     model_base->setColor(255, 150, 0);
 
     model_blocks->setColor(255,255,255);
     model_blocks->setKd(1,1,1);
+
+    /*model_cloud->setColor(255, 255, 255);
+    model_cloud->setKd(1, 1, 1);
+    model_cloud->set_ambience_maj(true);*/
+
+    model_frames->setColor(0,0,200);
 
     for (int i = 0; i < NumModels; i++) {
 

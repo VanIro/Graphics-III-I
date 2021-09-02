@@ -432,9 +432,14 @@ void Model::transformModel(mat4f& viewMat, mat4f& projection)
                         temptri.setIntensity(2, intensities_list[temptri.vert_indices[2]]);
                     }
                     else {
-                        temptri.setIntensity(0, calcIntensity(Ka, Kdm, Ksm, nsm, tri.vertices[0], LLight->getPosition(), view, tri.normals[0], Ia, LLight->getIntensities()));
-                        temptri.setIntensity(1, calcIntensity(Ka, Kdm, Ksm, nsm, tri.vertices[1], LLight->getPosition(), view, tri.normals[1], Ia, LLight->getIntensities()));
-                        temptri.setIntensity(2, calcIntensity(Ka, Kdm, Ksm, nsm, tri.vertices[2], LLight->getPosition(), view, tri.normals[2], Ia, LLight->getIntensities()));
+                        vect4 Iplus;
+                        if (ambient) {
+                            Iplus = Ia + Iam;
+                        }
+                        else Iplus = Ia;
+                        temptri.setIntensity(0, calcIntensity(Ka, Kdm, Ksm, nsm, tri.vertices[0], LLight->getPosition(), view, tri.normals[0], Iplus, LLight->getIntensities()));
+                        temptri.setIntensity(1, calcIntensity(Ka, Kdm, Ksm, nsm, tri.vertices[1], LLight->getPosition(), view, tri.normals[1], Iplus, LLight->getIntensities()));
+                        temptri.setIntensity(2, calcIntensity(Ka, Kdm, Ksm, nsm, tri.vertices[2], LLight->getPosition(), view, tri.normals[2], Iplus, LLight->getIntensities()));
                     }
 
                 }

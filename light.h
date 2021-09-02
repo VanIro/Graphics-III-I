@@ -18,14 +18,17 @@ public:
     bool draw_flag;
     bool move_flag;
     bool z_dir;
+    char rgba;
     vec2i MousePosRec;
     float rad;
+    float light_incr = 0.1;
     Light() {
         Position = vect4(275,-273,840,0);
-        Il = { 0.9f, 0.2f, 0.4f };
-        draw_flag = true;
+        Il = { 0.9f, 0.9f, 0.9f };
+        draw_flag = false;
         move_flag = false;
         z_dir = false;
+        rgba = 'a';
         rad = 50 / float(abs(ZNEAR - ZFAR));
     }
     void translate(vect4 pt)
@@ -60,7 +63,8 @@ public:
     void draw() {
         if (!draw_flag)
             return;
-        glColor3d(1, 0.65, 0);
+        //glColor3d(1, 0.65, 0);
+        glColor3d(Il.x, Il.y, Il.z);
         glPushMatrix();
         glTranslatef(drawPosition.x+800/2, drawPosition.y+800/2, 0);
 
@@ -89,6 +93,56 @@ public:
             break;
         case KEEYS::OKEY:
             draw_flag = !draw_flag;
+            break;
+        case KEEYS::ONE:
+            rgba = 'r';
+            break;
+        case KEEYS::TWO:
+            rgba = 'g';
+            break;
+        case KEEYS::THREE:
+            rgba = 'b';
+            break;
+        case KEEYS::FOUR:
+            rgba = 'a';
+            break;
+        case KEEYS::PLUS:
+            if (rgba == 'r' || rgba == 'a') {
+                Il.x += light_incr;
+                if (Il.x > 1) Il.x = 1;
+            }
+            if (rgba == 'g' || rgba == 'a') {
+                Il.y += light_incr;
+                if (Il.y > 1) Il.y = 1;
+            }
+            if (rgba == 'b' || rgba == 'a') {
+                Il.z += light_incr;
+                if (Il.z > 1) Il.z = 1;
+            }
+            if (rgba == '#') {
+
+            }
+                
+            //std::cout << "plus";
+
+            break;
+        case KEEYS::MINUS:
+            if (rgba == 'r' || rgba == 'a') {
+                Il.x -= light_incr;
+                if (Il.x < 0) Il.x = 0;
+            }
+            if (rgba == 'g' || rgba == 'a') {
+                Il.y -= light_incr;
+                if (Il.y < 0) Il.y = 0;
+            }
+            if (rgba == 'b' || rgba == 'a') {
+                Il.z -= light_incr;
+                if (Il.z < 0) Il.z = 0;
+            }
+            if (rgba == '#') {
+
+            }
+            //std::cout << "minus";
             break;
         }
     }

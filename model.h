@@ -26,6 +26,8 @@ private:
     vect4 Kdm, Ksm;
     float nsm;
     vec3 colorm;
+    bool ambient;
+    vect4 Iam;
 
     //std::vector<std::vector<vect4>> vertices;
 
@@ -36,6 +38,8 @@ public:
         Ksm = vect4{ 0.508273f, 0.508273f, 0.508273f };
         nsm = 100.0f;
         colorm = vec3{ 200, 205, 200 }.normalize();
+        ambient = false;
+        Iam = {1,1,1};
     }
 
     void oldLoad(std::string);
@@ -47,6 +51,12 @@ public:
     void scale_model(float, char dim = 'N');
     bool backFaceDetection(Triangle& tri);
     void transformModel(mat4f&, mat4f&);
+    void set_ambience_maj(bool val) {
+        ambient = val;
+    }
+    void set_ambience(float r, float g, float b){
+        Iam = vect4(r, g, b);
+    }
     //bool backfaceDetectionNormalize(Triangle& tri);
     bool Culling(Triangle& tri);
     //void updateTransform(mat4f& view, mat4f& projection);

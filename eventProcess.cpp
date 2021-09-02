@@ -126,6 +126,24 @@ void keyboard(unsigned char key, int x, int y)
             models[i]->rotate_model('Y', -10);
         }
         break;
+    case '1':
+        LLight->processKeyboard(KEEYS::ONE);
+        break;
+    case '2':
+        LLight->processKeyboard(KEEYS::TWO);
+        break;
+    case '3':
+        LLight->processKeyboard(KEEYS::THREE);
+        break;
+    case '4':
+        LLight->processKeyboard(KEEYS::FOUR);
+        break;
+    case '+':
+        LLight->processKeyboard(KEEYS::PLUS);
+        break;
+    case '-':
+        LLight->processKeyboard(KEEYS::MINUS);
+        break;
     case 27:
         exit(0);
         break;
