@@ -38,11 +38,11 @@ float lightZ = -500.0f;
 
 vect4 view = vect4{ 0.0f, 0.0f, 1.0f };
 vect4 Ka = vect4{ 0.19125f, 0.19125f, 0.19225f };
-vect4 Kd = vect4{ 0.50754f, 0.50754f, 0.50754f };
-vect4 Ks = vect4{ 0.508273f, 0.508273f, 0.508273f };
+//vect4 Kd = vect4{ 0.50754f, 0.50754f, 0.50754f };
+//vect4 Ks = vect4{ 0.508273f, 0.508273f, 0.508273f };
 vect4 light = vect4{ lightX, lightY, lightZ };
 //vect4 light = vect4{ lightX, lightY, lightZ };
-float ns = 300.0f;
+//float ns = 300.0f;
 vect4 Ia = vect4{ 0.5f, 0.5f, 0.5f };
 vect4 Il = vect4{ 0.9f, 0.9f, 0.9f };
 
@@ -73,3 +73,11 @@ vec2i MousePos;
 vect4 camera_right = {0,0,0,0};
 vect4 camera_up = { 0,0,0,0 };
 vect4 camera_front = { 0,0,0,0 };
+
+bool depth_buff_check(int x, int y , float z) {
+    if (z_buffer[x][y] < z) {
+        z_buffer[x][y] = z;
+        return true;
+    }
+
+}

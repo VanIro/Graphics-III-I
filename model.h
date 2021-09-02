@@ -23,9 +23,21 @@ private:
     std::vector<Triangle> triangles;
     std::vector<Triangle> ftriangles;
 
+    vect4 Kdm, Ksm;
+    float nsm;
+    vec3 colorm;
+
     //std::vector<std::vector<vect4>> vertices;
 
 public:
+    Model() {
+
+        Kdm = vect4{ 0.50754f, 0.50754f, 0.50754f };
+        Ksm = vect4{ 0.508273f, 0.508273f, 0.508273f };
+        nsm = 100.0f;
+        colorm = vec3{ 200, 205, 200 }.normalize();
+    }
+
     void oldLoad(std::string);
     void Load(std::string);
     void modelToScreen();
@@ -43,6 +55,25 @@ public:
     bool is_in_viewPlane(int vertices[3]); 
     bool is_in_viewPlane(vect4 vertices[3]);
 
+    void setColor(float r, float g, float b) {
+        colorm.x = r;
+        colorm.y = g;
+        colorm.z = b;
+        colorm = colorm.normalize();
+    }
+    void setKd(float r, float g, float b){
+        Kdm.x = r;
+        Kdm.y = g;
+        Kdm.z = b;
+    }
+    void setKs(float r, float g, float b) {
+        Ksm.x = r;
+        Ksm.y = g;
+        Ksm.z = b;
+    }
+    void setNs(float n){
+        nsm = n;
+    }
     void draw();
     float calIntensity(vect4, vect4, vect4);
     void flatShading(Triangle&);

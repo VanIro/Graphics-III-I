@@ -149,6 +149,7 @@ void DrawFlatBottomTriangle(const Vertex& it0, const Vertex& it1, const Vertex& 
 // does processing common to both flat top and flat bottom tris
 // scan over triangle in screen space, interpolate attributes,
 // invoke ps and write pixel to screen
+bool depth_buffer_check(int, int, float);
 void DrawFlatTriangle(const Vertex& it0, const Vertex& it1, const Vertex& it2, const Vertex& dv0, const Vertex& dv1, Vertex itEdge1)
 {
     // create edge interpolant for left edge (always v0)

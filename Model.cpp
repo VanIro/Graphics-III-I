@@ -292,10 +292,19 @@ void Model::rotate_model(char XYZ, float angle)
 //}
 
 bool Model::is_in_depthBox(vect4 vertices[3]) {
+    bool flag1, flag2, flag3;
+    flag1 = flag2 = flag3 = false;
     if (vertices[0].z < ZNEAR && vertices[0].z > ZFAR)
-        if (vertices[1].z < ZNEAR && vertices[1].z > ZFAR)
-            if (vertices[2].z < ZNEAR && vertices[2].z > ZFAR)
-                return true;
+        flag1= true;
+    if (vertices[1].z < ZNEAR && vertices[1].z > ZFAR)
+        flag2 = true;
+    if (vertices[2].z < ZNEAR && vertices[2].z > ZFAR)
+        flag3 = true;
+
+    if (
+        flag1&&flag2&&flag3//flag1 && flag2 || flag2 && flag3 || flag1 && flag3
+        )
+        return true;
     return false;
 }
 bool Model::is_in_depthBox(int vertices[3]) {
@@ -356,7 +365,7 @@ void Model::transformModel(mat4f& viewMat, mat4f& projection)
         tmp_vert = mulProj(projection, tmp_vert);// mulProj doesnt change z coord
         fvertices_list.push_back(tmp_vert);
         intensities_list.push_back(
-            calcIntensity(Ka, Kd, Ks, ns,vert, LLight->getPosition(), view, 
+            calcIntensity(Ka, Kdm, Ksm, nsm,vert, LLight->getPosition(), view, 
                 normals_list[vert_norm_indices[vec_index_count++]],
                 Ia, LLight->getIntensities()
             )
@@ -413,7 +422,7 @@ void Model::transformModel(mat4f& viewMat, mat4f& projection)
                         fvertices_list[temptri.vert_indices[1]],
                         fvertices_list[temptri.vert_indices[2]]
                     );
-                tri.color = vec3{ 200, 205, 200 }.normalize();
+                temptri.color = colorm;// vec3{ 200, 205, 200 }.normalize();
                 if (Shade) {
                     //using world coordinates to calculate lighting
                     
@@ -423,14 +432,14 @@ void Model::transformModel(mat4f& viewMat, mat4f& projection)
                         temptri.setIntensity(2, intensities_list[temptri.vert_indices[2]]);
                     }
                     else {
-                        temptri.setIntensity(0, calcIntensity(Ka, Kd, Ks, ns, tri.vertices[0], LLight->getPosition(), view, tri.normals[0], Ia, LLight->getIntensities()));
-                        temptri.setIntensity(1, calcIntensity(Ka, Kd, Ks, ns, tri.vertices[1], LLight->getPosition(), view, tri.normals[1], Ia, LLight->getIntensities()));
-                        temptri.setIntensity(2, calcIntensity(Ka, Kd, Ks, ns, tri.vertices[2], LLight->getPosition(), view, tri.normals[2], Ia, LLight->getIntensities()));
+                        temptri.setIntensity(0, calcIntensity(Ka, Kdm, Ksm, nsm, tri.vertices[0], LLight->getPosition(), view, tri.normals[0], Ia, LLight->getIntensities()));
+                        temptri.setIntensity(1, calcIntensity(Ka, Kdm, Ksm, nsm, tri.vertices[1], LLight->getPosition(), view, tri.normals[1], Ia, LLight->getIntensities()));
+                        temptri.setIntensity(2, calcIntensity(Ka, Kdm, Ksm, nsm, tri.vertices[2], LLight->getPosition(), view, tri.normals[2], Ia, LLight->getIntensities()));
                     }
 
                 }
                 else {
-                    flatShading(tri);
+                    flatShading(temptri);
                 }
 
                 /*std::cout << "£" << temptri.vertices[0] << std::endl;

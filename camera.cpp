@@ -56,17 +56,11 @@ void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
         move = Front * deltaTime * Speed*0.8f;
         std::cout << "front..." << move.x << " " << move.y << " " << move.z << "\n";
         Position = Position + move;
-        /*float disp = pow(move.z * move.z + move.x * move.x + move.y * move.y + move.z * move.z, 0.5f);
-        ZNEAR += disp;
-        ZFAR += disp;*/
         refresh_req = true;
     }
     if (direction == Camera_Movement::BACK) {
         move = Front * deltaTime * (-Speed)*.8f;
         Position = Position + move;
-        /*float disp = - pow(move.z* move.z + move.x* move.x + move.y* move.y + move.z* move.z, 0.5f);
-        ZNEAR += disp;
-        ZFAR += disp;*/
         refresh_req = true;
     }
 
@@ -77,12 +71,6 @@ void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
         }
         else {
             viewFree_flag = false;
-            z_flag = false;
-        }
-    }
-    if (direction == Camera_Movement::ZKEY) {
-        if (viewFree_flag) {
-            z_flag = !z_flag;
         }
     }
 
@@ -104,30 +92,14 @@ void Camera::mouseMoveEvent(int x, int y) {
         //std::cout << "mousemove <- camera flag is true";
         float delx = x - MousePosRec.x; MousePosRec.x = x;
         float dely = y - MousePosRec.y; MousePosRec.y = y;
-        float magntd;
-        vect4 axis;
-        if(z_flag){
-            magntd = abs(delx);
-
-        }
-        else {
-            magntd = powf(delx * delx + dely * dely, 0.5f);
-            axis = { dely,-delx,0,0 };
-        }
-        //axis = axis * -1; //if z dirn is inwards <coordinate-z>
-
+        float magntd = powf(delx * delx + dely * dely, 0.5f);
         if (magntd <= 0.001)
             return;
         delx /= magntd; dely /= magntd;
         //std::cout << delx << " " << dely << " " << magntd << "\n";
         dely *= -1;   //if y dirn is downwards <window-y>
-        if (z_flag) {
-            axis = { 0,0,(delx>0)?1.0f:-1.0f,0 };
-        }
-        else {
-            axis = { dely,-delx,0,0 };
-        }
-        
+        vect4 axis(dely,-delx,0,0);
+        //axis = axis * -1; //if z dirn is inwards <coordinate-z>
         //rotate proporp... to magntd about axis
         magntd *= 0.015 * deltaTime; //std::cout << 0.002 * deltaTime;
         float tmp_mat1[4][4], Itmp_mat1[4][4];

@@ -8,6 +8,7 @@
 extern vec2i MousePos;
 extern float deltaTime;
 extern vect4 camera_up, camera_right, camera_front;
+extern float ZNEAR, ZFAR;
 
 class Light {
 public:
@@ -17,11 +18,13 @@ public:
     bool move_flag;
     bool z_dir;
     vec2i MousePosRec;
+    float rad;
     Light() {
-        Position.x = Position.y = Position.z = 0;
+        Position = vect4(-120,15,380,0);
         Il = { 0.9f, 0.9f, 0.9f };
         move_flag = false;
         z_dir = false;
+        rad = 50 / float(abs(ZNEAR - ZFAR));
     }
     void translate(vect4 pt)
     {
@@ -53,12 +56,13 @@ public:
         drawPosition = mulProj(projection, drawPosition);
     }
     void draw() {
-        glColor3d(0, 1, 1);
+        if(drawPosition.z)
+        glColor3d(1, 0.65, 0);
         glPushMatrix();
         glTranslatef(drawPosition.x+800/2, drawPosition.y+800/2, 0);
 
         //glTranslatef(3.0, 0.0, -6.0);
-        glutSolidSphere(10, 50, 50);
+        glutSolidSphere(rad*abs(drawPosition.z), 50, 50);
         glPopMatrix();
     }
     void processKeyboard(KEEYS key) {
@@ -99,6 +103,7 @@ public:
             }
             Position = Position + camera_right * delx;
             Position = Position + camera_up * dely;
+            std::cout << "light Pos : "<<Position;
             //std::cout << "\nx : [ "<<delx<< " ]" << (camera_right * delx) << "y : [ " << dely << " ]" << (camera_up * dely);
         }
     }

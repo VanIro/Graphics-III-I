@@ -16,15 +16,24 @@ int main(int argc, char** argv)
     //camera = new Camera();
     //Model* model = model_zaha;// new Model;
 
-    model_base->Load("obj/Ibase.obj");//model_base->Load("obj/baseOnly.obj");
-    model_base->Load("obj/Istructure.obj");//model_blocks->Load("obj/blocksOnly.obj");
-    model_base->Load("obj/Iglass.obj");//model_glass->Load("obj/glassOnly2.obj");
+    model_base->Load("obj/Ibase3.obj");//model_base->Load("obj/baseOnly.obj");
+    model_blocks->Load("obj/IStructure2.obj");//model_blocks->Load("obj/blocksOnly.obj");
+    model_glass->Load("obj/Iglass3.obj");//model_glass->Load("obj/glassOnly2.obj");
     
     //model_zaha->Load("obj/colored1.obj");
     //model_zaha->Load("obj/smooth_zaha.obj");
     //model_zaha->Load("obj/building - Copy.obj");
 
     //model_zaha->camera = camera;
+
+    model_glass->setNs(1);
+    model_glass->setKs(1,1,1);
+    model_glass->setColor(100, 200, 200);
+
+    model_base->setColor(155, 50, 0);
+
+    model_blocks->setColor(255,255,255);
+    model_blocks->setKd(0.8,0.8,0.8);
 
     for (int i = 0; i < NumModels; i++) {
         models[i]->scale_model(10);
