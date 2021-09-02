@@ -16,9 +16,9 @@ int main(int argc, char** argv)
     //camera = new Camera();
     //Model* model = model_zaha;// new Model;
 
-    model_base->Load("obj/baseOnly.obj");
-    model_blocks->Load("obj/blocksOnly.obj");
-    model_glass->Load("obj/glassOnly2.obj");
+    model_base->Load("obj/Ibase.obj");//model_base->Load("obj/baseOnly.obj");
+    model_base->Load("obj/Istructure.obj");//model_blocks->Load("obj/blocksOnly.obj");
+    model_base->Load("obj/Iglass.obj");//model_glass->Load("obj/glassOnly2.obj");
     
     //model_zaha->Load("obj/colored1.obj");
     //model_zaha->Load("obj/smooth_zaha.obj");
@@ -33,7 +33,7 @@ int main(int argc, char** argv)
         //models[i]->scale_model(1.5, 'Y');
         //models[i]->rotate_model('Z', 335);
         //models[i]->rotate_model('Y', 100);
-        models[i]->rotate_model('X', 180);
+        models[i]->rotate_model('Z', 180);
         models[i]->translate_model({-50,30,150,0});
     }
 

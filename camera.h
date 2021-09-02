@@ -20,7 +20,8 @@ static enum class Camera_Movement {
     AKEY,
     SKEY,
     DKEY,
-    VKEY
+    VKEY,
+    ZKEY
 };
 
 class Camera
@@ -43,6 +44,7 @@ public:
     float projectionMat[4][4];
 
     bool viewFree_flag;
+    bool z_flag;
 
     bool front_flag;
 

@@ -84,6 +84,7 @@ void keyboard(unsigned char key, int x, int y)
     case 'z':
     case 'Z':
         LLight->processKeyboard(KEEYS::ZKEY);
+        camera->processKeyboard(Camera_Movement::ZKEY, deltaTime);
         break;
     case 27:
         exit(0);
