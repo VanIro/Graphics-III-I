@@ -15,13 +15,15 @@ public:
 	vect4 Position;
     vect4 drawPosition;
 	vect4 Il;
+    bool draw_flag;
     bool move_flag;
     bool z_dir;
     vec2i MousePosRec;
     float rad;
     Light() {
-        Position = vect4(-120,15,380,0);
-        Il = { 0.9f, 0.9f, 0.9f };
+        Position = vect4(275,-273,840,0);
+        Il = { 0.9f, 0.2f, 0.4f };
+        draw_flag = true;
         move_flag = false;
         z_dir = false;
         rad = 50 / float(abs(ZNEAR - ZFAR));
@@ -56,7 +58,8 @@ public:
         drawPosition = mulProj(projection, drawPosition);
     }
     void draw() {
-        if(drawPosition.z)
+        if (!draw_flag)
+            return;
         glColor3d(1, 0.65, 0);
         glPushMatrix();
         glTranslatef(drawPosition.x+800/2, drawPosition.y+800/2, 0);
@@ -84,6 +87,9 @@ public:
                 z_dir = !z_dir;
             }
             break;
+        case KEEYS::OKEY:
+            draw_flag = !draw_flag;
+            break;
         }
     }
     void mouseMoveEvent(int x, int y) {
@@ -93,8 +99,8 @@ public:
             float delx = x - MousePosRec.x; MousePosRec.x = x;
             float dely = y - MousePosRec.y; MousePosRec.y = y;
             float speed = 0.06;
-            delx = delx * speed * deltaTime; delx *= -1;
-            dely = -dely * speed * deltaTime; dely *= -1;
+            delx = delx * speed * deltaTime; //delx *= -1;
+            dely = -dely * speed * deltaTime; //dely *= -1;
             //std::cout << "\n "<<delx<<" , " << dely << " z_flag : " << z_dir;
             if (z_dir) {
                 Position = Position + camera_front*dely;
@@ -103,7 +109,7 @@ public:
             }
             Position = Position + camera_right * delx;
             Position = Position + camera_up * dely;
-            std::cout << "light Pos : "<<Position;
+            //std::cout << "light Pos : "<<Position;
             //std::cout << "\nx : [ "<<delx<< " ]" << (camera_right * delx) << "y : [ " << dely << " ]" << (camera_up * dely);
         }
     }

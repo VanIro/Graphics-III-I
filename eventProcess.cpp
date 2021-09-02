@@ -47,7 +47,7 @@ void keyboard(unsigned char key, int x, int y)
 
     switch (key)
     {
-    case 'w':
+    /*case 'w':
     case 'W':
         camera->processKeyboard(Camera_Movement::WKEY, deltaTime);
         break;
@@ -62,7 +62,7 @@ void keyboard(unsigned char key, int x, int y)
     case 'd':
     case 'D':
         camera->processKeyboard(Camera_Movement::DKEY, deltaTime);
-        break;
+        break;*/
     case 'v':
     case 'V':
         LLight->turn_flags_off();
@@ -85,6 +85,46 @@ void keyboard(unsigned char key, int x, int y)
     case 'Z':
         LLight->processKeyboard(KEEYS::ZKEY);
         camera->processKeyboard(Camera_Movement::ZKEY, deltaTime);
+        break;
+    case 'o':
+    case 'O':
+        LLight->processKeyboard(KEEYS::OKEY);
+        break;
+    case 'e':
+    case 'E':
+        for (int i = 0; i < NumModels; i++) {
+            models[i]->rotate_model('Z', 10);
+        }
+        break;
+    case 'r':
+    case 'R':
+        for (int i = 0; i < NumModels; i++) {
+            models[i]->rotate_model('Z', -10);
+        }
+        break;
+    case 'x':
+    case 'X':
+        for (int i = 0; i < NumModels; i++) {
+            models[i]->rotate_model('X', 10);
+        }
+        break;
+    case 'c':
+    case 'C':
+        for (int i = 0; i < NumModels; i++) {
+            models[i]->rotate_model('X', -10);
+        }
+        break;
+    case 's':
+    case 'S':
+        for (int i = 0; i < NumModels; i++) {
+            models[i]->rotate_model('Y', 10);
+        }
+        break;
+    case 'd':
+    case 'D':
+        for (int i = 0; i < NumModels; i++) {
+            models[i]->rotate_model('Y', -10);
+        }
         break;
     case 27:
         exit(0);

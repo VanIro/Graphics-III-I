@@ -17,8 +17,11 @@ int main(int argc, char** argv)
     //Model* model = model_zaha;// new Model;
 
     model_base->Load("obj/Ibase3.obj");//model_base->Load("obj/baseOnly.obj");
-    model_blocks->Load("obj/IStructure2.obj");//model_blocks->Load("obj/blocksOnly.obj");
-    model_glass->Load("obj/Iglass3.obj");//model_glass->Load("obj/glassOnly2.obj");
+    model_blocks->Load("obj/IStructure3.obj");
+    //model_blocks->Load("obj/blockOnly.obj");
+    model_glass->Load("obj/Iglass3.obj");
+    //model_glass->Load("obj/glassOnly.obj");
+    model_cloud->Load("obj/cloud1.obj");
     
     //model_zaha->Load("obj/colored1.obj");
     //model_zaha->Load("obj/smooth_zaha.obj");
@@ -30,20 +33,23 @@ int main(int argc, char** argv)
     model_glass->setKs(1,1,1);
     model_glass->setColor(100, 200, 200);
 
-    model_base->setColor(155, 50, 0);
+    model_base->setColor(255, 150, 0);
 
     model_blocks->setColor(255,255,255);
-    model_blocks->setKd(0.8,0.8,0.8);
+    model_blocks->setKd(1,1,1);
 
     for (int i = 0; i < NumModels; i++) {
+
         models[i]->scale_model(10);
+        //models[i]->scale_model(50);
+        
         //models[i]->scale_model(1.5);
         //models[i]->scale_model(2.5,'Z');
         //models[i]->scale_model(1.5, 'Y');
         //models[i]->rotate_model('Z', 335);
         //models[i]->rotate_model('Y', 100);
         models[i]->rotate_model('Z', 180);
-        models[i]->translate_model({-50,30,150,0});
+        models[i]->translate_model({-50,120,250,0});
     }
 
     /*std::cout << "\nmmm" << vect4::a << " --> " << vect4::X;
@@ -131,6 +137,9 @@ void updateFunction(int val)
     //model_zaha->rotate_model('X', 5);
     //model_zaha->rotate_model('Y', 10);
     //model_zaha->rotate_model('X', -10);
+    /*for (int i = 0; i < NumModels; i++) {
+        models[i]->rotate_model('Y',10);
+    }*/
     glutPostRedisplay();
 }
 

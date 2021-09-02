@@ -61,6 +61,7 @@ void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
     if (direction == Camera_Movement::BACK) {
         move = Front * deltaTime * (-Speed)*.8f;
         Position = Position + move;
+        std::cout<<Position;
         refresh_req = true;
     }
 
