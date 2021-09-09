@@ -7,7 +7,7 @@ Fifth semester OpenGL graphics project <2078>.
 
 Jiwan, Yaman, Luna, Bipin  #JBLY
 
-This program loads a number of models from an  obj file, and using the vertex and normal data from that file applies the Phong illumination model and Gouraud shading to render the
+This program loads a number of models from obj files, and using the vertex and normal data from those files, applies the Phong illumination model and Gouraud shading to render the
 models on the screen.
 
 Controls
